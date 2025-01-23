@@ -7,79 +7,83 @@
     <style>
         body {
             background-image: url('https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            height: 100vh; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: flex-start; 
-            padding-top: 50px; 
-            flex-direction: column; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            flex-direction: column;
         }
 
         .rounded-rectangle {
-            background-color: rgba(255, 255, 255, 0.8); 
-            border-radius: 15px; 
-            width: 300px; 
-            height: 50px; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            margin: 0 auto; 
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            width: 300px;
+            height: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
         }
 
         input {
-            border: none; 
-            background: transparent; 
-            outline: none; 
-            width: 90%; 
-            font-size: 16px; 
-            padding: 10px; 
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 90%;
+            font-size: 16px;
+            padding: 10px;
         }
 
         .message {
-            color: red; 
-            text-align: center; 
-            margin-top: 20px; 
+            color: red;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .results {
-            color: green; 
-            text-align: center; 
-            margin-top: 10px; 
+            color: green;
+            text-align: center;
+            margin-top: 10px;
         }
 
         img {
-            margin-top: 20px; 
-            max-width: 300px; 
-            border-radius: 15px; 
-            display: none; 
+            margin-top: 20px;
+            max-width: 300px;
+            border-radius: 15px;
+            display: none;
         }
 
         .label {
-            background-color: rgba(255, 255, 255, 0.8); 
-            border-radius: 10px; 
-            text-align: center; 
-            margin-top: 10px; 
-            padding: 10px; 
-            display: none; 
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            display: none;
         }
 
-        .login-button {
-            position: absolute; 
-            top: 10px; 
-            right: 10px; 
-            background-color: rgba(255, 255, 255, 0.8); 
-            border: none; 
-            border-radius: 15px; 
-            padding: 10px 20px; 
-            font-size: 14px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+        .login-button, .create-account-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .create-account-button {
+            top: 50px;
         }
 
         .modal {
@@ -123,15 +127,23 @@
             cursor: pointer;
         }
 
-        .error-message {
-            color: red;
+        .error-message, .success-message {
             text-align: center;
             margin-top: 10px;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .success-message {
+            color: green;
         }
     </style>
 </head>
 <body>
     <button class="login-button" id="loginButton">Login</button>
+    <button class="create-account-button" id="createAccountButton">Create Account</button>
 
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
@@ -141,6 +153,7 @@
     <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image">
     <div class="label" id="resultLabel">Yarhm</div>
 
+    <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <input type="text" id="usernameInput" placeholder="Username">
@@ -150,22 +163,39 @@
         </div>
     </div>
 
+    <!-- Create Account Modal -->
+    <div class="modal" id="createAccountModal">
+        <div class="modal-content">
+            <input type="text" id="newUsernameInput" placeholder="New Username">
+            <input type="password" id="newPasswordInput" placeholder="New Password">
+            <button id="submitCreateAccount">Create Account</button>
+            <div class="error-message" id="accountErrorMessage"></div>
+            <div class="success-message" id="accountSuccessMessage"></div>
+        </div>
+    </div>
+
     <script>
         const loginButton = document.getElementById('loginButton');
+        const createAccountButton = document.getElementById('createAccountButton');
         const loginModal = document.getElementById('loginModal');
+        const createAccountModal = document.getElementById('createAccountModal');
         const submitLogin = document.getElementById('submitLogin');
+        const submitCreateAccount = document.getElementById('submitCreateAccount');
         const errorMessage = document.getElementById('errorMessage');
+        const accountErrorMessage = document.getElementById('accountErrorMessage');
+        const accountSuccessMessage = document.getElementById('accountSuccessMessage');
         const usernameInput = document.getElementById('usernameInput');
         const passwordInput = document.getElementById('passwordInput');
+        const newUsernameInput = document.getElementById('newUsernameInput');
+        const newPasswordInput = document.getElementById('newPasswordInput');
         const searchInput = document.getElementById('searchInput');
         const resultMessage = document.getElementById('resultMessage');
         const resultsMessage = document.getElementById('resultsMessage');
         const resultImage = document.getElementById('resultImage');
         const resultLabel = document.getElementById('resultLabel');
 
-        const validCredentials = {
-            username: 'admin',
-            password: 'password123'
+        const accounts = {
+            admin: 'password123'
         };
 
         // Show login modal
@@ -173,12 +203,17 @@
             loginModal.style.display = 'flex';
         });
 
+        // Show create account modal
+        createAccountButton.addEventListener('click', () => {
+            createAccountModal.style.display = 'flex';
+        });
+
         // Handle login
         submitLogin.addEventListener('click', () => {
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
-            if (username === validCredentials.username && password === validCredentials.password) {
+            if (accounts[username] && accounts[username] === password) {
                 errorMessage.textContent = '';
                 alert('Login successful!');
                 loginModal.style.display = 'none';
@@ -189,11 +224,27 @@
             }
         });
 
-        // Hide modal when clicking outside
-        window.addEventListener('click', (event) => {
-            if (event.target === loginModal) {
-                loginModal.style.display = 'none';
+        // Handle account creation
+        submitCreateAccount.addEventListener('click', () => {
+            const newUsername = newUsernameInput.value.trim();
+            const newPassword = newPasswordInput.value.trim();
+
+            if (accounts[newUsername]) {
+                accountErrorMessage.textContent = 'Username is already taken.';
+                accountSuccessMessage.textContent = '';
+            } else {
+                accounts[newUsername] = newPassword;
+                accountErrorMessage.textContent = '';
+                accountSuccessMessage.textContent = 'Account created successfully!';
+                newUsernameInput.value = '';
+                newPasswordInput.value = '';
             }
+        });
+
+        // Hide modals when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) loginModal.style.display = 'none';
+            if (event.target === createAccountModal) createAccountModal.style.display = 'none';
         });
 
         // Search scripts
@@ -228,5 +279,3 @@
     </script>
 </body>
 </html>
-
-
