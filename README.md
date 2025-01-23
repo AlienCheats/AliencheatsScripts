@@ -82,10 +82,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .create-account-button {
-            top: 50px;
-        }
-
         .modal {
             position: fixed;
             top: 0;
@@ -139,13 +135,24 @@
         .success-message {
             color: green;
         }
+
+        .user-display {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            width: 300px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <button class="login-button" id="loginButton">Login</button>
-    <button class="create-account-button" id="createAccountButton">Create Account</button>
+    <div id="userDisplay" class="user-display" style="display: none;"></div>
 
-    <div class="rounded-rectangle">
+    <div class="rounded-rectangle" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
     <div class="message" id="resultMessage"></div>
@@ -193,13 +200,27 @@
         const resultsMessage = document.getElementById('resultsMessage');
         const resultImage = document.getElementById('resultImage');
         const resultLabel = document.getElementById('resultLabel');
+        const userDisplay = document.getElementById('userDisplay');
+        const searchContainer = document.getElementById('searchContainer');
 
         // Retrieve stored accounts from localStorage
         const accounts = JSON.parse(localStorage.getItem('accounts')) || {};
+        let loggedInUser = localStorage.getItem('loggedInUser');
 
-        // Save accounts to localStorage
         const saveAccounts = () => {
             localStorage.setItem('accounts', JSON.stringify(accounts));
+        };
+
+        // Update user display
+        const updateUserDisplay = () => {
+            if (loggedInUser) {
+                userDisplay.textContent = loggedInUser;
+                userDisplay.style.display = 'flex';
+                searchContainer.style.display = 'none'; // Hide search bar when logged in
+            } else {
+                userDisplay.style.display = 'none';
+                searchContainer.style.display = 'flex'; // Show search bar when logged out
+            }
         };
 
         // Show login modal
@@ -219,8 +240,11 @@
 
             if (accounts[username] && accounts[username] === password) {
                 errorMessage.textContent = '';
-                alert(`Login successful! Welcome, ${username}.`);
+                loggedInUser = username;
+                localStorage.setItem('loggedInUser', loggedInUser); // Save logged-in user
+                alert(`Login successful! Welcome, ${loggedInUser}.`);
                 loginModal.style.display = 'none';
+                updateUserDisplay();
                 usernameInput.value = '';
                 passwordInput.value = '';
             } else {
@@ -234,28 +258,19 @@
             const newPassword = newPasswordInput.value.trim();
 
             if (accounts[newUsername]) {
-                accountErrorMessage.textContent = 'Username is already taken.';
+                accountErrorMessage.textContent = 'Username already taken.';
                 accountSuccessMessage.textContent = '';
-            } else if (newUsername && newPassword) {
+            } else {
                 accounts[newUsername] = newPassword;
                 saveAccounts();
-                accountErrorMessage.textContent = '';
                 accountSuccessMessage.textContent = 'Account created successfully!';
+                accountErrorMessage.textContent = '';
                 newUsernameInput.value = '';
                 newPasswordInput.value = '';
-            } else {
-                accountErrorMessage.textContent = 'Please fill out all fields.';
-                accountSuccessMessage.textContent = '';
             }
         });
 
-        // Hide modals when clicking outside
-        window.addEventListener('click', (event) => {
-            if (event.target === loginModal) loginModal.style.display = 'none';
-            if (event.target === createAccountModal) createAccountModal.style.display = 'none';
-        });
-
-        // Search scripts
+        // Event listener for search input
         searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const keyword = searchInput.value.trim().toLowerCase();
@@ -278,6 +293,9 @@
                 searchInput.value = '';
             }
         });
+
+        // Initialize user display on page load
+        updateUserDisplay();
     </script>
 </body>
 </html>
