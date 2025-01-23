@@ -194,8 +194,12 @@
         const resultImage = document.getElementById('resultImage');
         const resultLabel = document.getElementById('resultLabel');
 
-        const accounts = {
-            admin: 'password123'
+        // Retrieve stored accounts from localStorage
+        const accounts = JSON.parse(localStorage.getItem('accounts')) || {};
+
+        // Save accounts to localStorage
+        const saveAccounts = () => {
+            localStorage.setItem('accounts', JSON.stringify(accounts));
         };
 
         // Show login modal
@@ -215,7 +219,7 @@
 
             if (accounts[username] && accounts[username] === password) {
                 errorMessage.textContent = '';
-                alert('Login successful!');
+                alert(`Login successful! Welcome, ${username}.`);
                 loginModal.style.display = 'none';
                 usernameInput.value = '';
                 passwordInput.value = '';
@@ -232,12 +236,16 @@
             if (accounts[newUsername]) {
                 accountErrorMessage.textContent = 'Username is already taken.';
                 accountSuccessMessage.textContent = '';
-            } else {
+            } else if (newUsername && newPassword) {
                 accounts[newUsername] = newPassword;
+                saveAccounts();
                 accountErrorMessage.textContent = '';
                 accountSuccessMessage.textContent = 'Account created successfully!';
                 newUsernameInput.value = '';
                 newPasswordInput.value = '';
+            } else {
+                accountErrorMessage.textContent = 'Please fill out all fields.';
+                accountSuccessMessage.textContent = '';
             }
         });
 
@@ -251,13 +259,7 @@
         searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const keyword = searchInput.value.trim().toLowerCase();
-
-                if (keyword === '') {
-                    resultMessage.textContent = '';
-                    resultsMessage.textContent = '';
-                    resultImage.style.display = 'none';
-                    resultLabel.style.display = 'none';
-                } else if (keyword === 'mm2') {
+                if (keyword === 'mm2') {
                     resultMessage.textContent = '';
                     resultsMessage.textContent = `Results for "${keyword}"`;
                     resultImage.style.display = 'block';
