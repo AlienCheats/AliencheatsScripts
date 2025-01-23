@@ -19,6 +19,55 @@
             flex-direction: column; 
         }
 
+        .rounded-rectangle {
+            background-color: rgba(255, 255, 255, 0.8); 
+            border-radius: 15px; 
+            width: 300px; 
+            height: 50px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto; 
+        }
+
+        input {
+            border: none; 
+            background: transparent; 
+            outline: none; 
+            width: 90%; 
+            font-size: 16px; 
+            padding: 10px; 
+        }
+
+        .message {
+            color: red; 
+            text-align: center; 
+            margin-top: 20px; 
+        }
+
+        .results {
+            color: green; 
+            text-align: center; 
+            margin-top: 10px; 
+        }
+
+        img {
+            margin-top: 20px; 
+            max-width: 300px; 
+            border-radius: 15px; 
+            display: none; 
+        }
+
+        .label {
+            background-color: rgba(255, 255, 255, 0.8); 
+            border-radius: 10px; 
+            text-align: center; 
+            margin-top: 10px; 
+            padding: 10px; 
+            display: none; 
+        }
+
         .login-button {
             position: absolute; 
             top: 10px; 
@@ -33,15 +82,14 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
         }
 
-        /* Login modal styles */
         .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-            display: none; /* Hidden by default */
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -85,6 +133,14 @@
 <body>
     <button class="login-button" id="loginButton">Login</button>
 
+    <div class="rounded-rectangle">
+        <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
+    </div>
+    <div class="message" id="resultMessage"></div>
+    <div class="results" id="resultsMessage"></div>
+    <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image">
+    <div class="label" id="resultLabel">Yarhm</div>
+
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <input type="text" id="usernameInput" placeholder="Username">
@@ -101,6 +157,11 @@
         const errorMessage = document.getElementById('errorMessage');
         const usernameInput = document.getElementById('usernameInput');
         const passwordInput = document.getElementById('passwordInput');
+        const searchInput = document.getElementById('searchInput');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultsMessage = document.getElementById('resultsMessage');
+        const resultImage = document.getElementById('resultImage');
+        const resultLabel = document.getElementById('resultLabel');
 
         const validCredentials = {
             username: 'admin',
@@ -109,7 +170,7 @@
 
         // Show login modal
         loginButton.addEventListener('click', () => {
-            loginModal.style.display = 'flex'; // Show the modal
+            loginModal.style.display = 'flex';
         });
 
         // Handle login
@@ -118,20 +179,50 @@
             const password = passwordInput.value.trim();
 
             if (username === validCredentials.username && password === validCredentials.password) {
-                errorMessage.textContent = ''; // Clear any error messages
+                errorMessage.textContent = '';
                 alert('Login successful!');
-                loginModal.style.display = 'none'; // Hide the modal
-                usernameInput.value = ''; // Clear input fields
+                loginModal.style.display = 'none';
+                usernameInput.value = '';
                 passwordInput.value = '';
             } else {
                 errorMessage.textContent = 'Password or username wrong, please try again.';
             }
         });
 
-        // Hide the modal when clicking outside of it
+        // Hide modal when clicking outside
         window.addEventListener('click', (event) => {
             if (event.target === loginModal) {
                 loginModal.style.display = 'none';
+            }
+        });
+
+        // Search scripts
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const keyword = searchInput.value.trim().toLowerCase();
+
+                if (keyword === '') {
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = '';
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
+                } else if (keyword === 'mm2') {
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = `Results for "${keyword}"`;
+                    resultImage.style.display = 'block';
+                    resultLabel.style.display = 'block';
+                } else if (keyword === 'fisch') {
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = `Results for "${keyword}"`;
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
+                } else {
+                    resultMessage.textContent = 'Nothing found here';
+                    resultsMessage.textContent = '';
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
+                }
+                searchInput.value = '';
             }
         });
     </script>
