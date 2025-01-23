@@ -17,6 +17,7 @@
             align-items: flex-start;
             padding-top: 50px;
             flex-direction: column;
+            position: relative; /* Relative positioning for the buttons */
         }
 
         .rounded-rectangle {
@@ -69,9 +70,6 @@
         }
 
         .login-button, .create-account-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             background-color: rgba(255, 255, 255, 0.8);
             border: none;
             border-radius: 15px;
@@ -80,6 +78,7 @@
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin: 5px; /* Add some margin between buttons */
         }
 
         .modal {
@@ -89,10 +88,10 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            display: none;
+            display: none; /* Hide modal by default */
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 1000; /* Ensure modal is on top */
         }
 
         .modal-content {
@@ -248,7 +247,7 @@
                 errorMessage.textContent = '';
                 loggedInUser = username;
                 localStorage.setItem('loggedInUser', loggedInUser); // Save logged-in user
-                alert(`Login successful! Welcome, ${loggedInUser}.`);
+                alert(`Login successful! Welcome, ${loggedInUser}!`);
                 loginModal.style.display = 'none';
                 updateUserDisplay();
             } else {
@@ -300,6 +299,16 @@
 
         // Initialize user display on page load
         updateUserDisplay();
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+            if (event.target === createAccountModal) {
+                createAccountModal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
