@@ -160,6 +160,12 @@
     <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image">
     <div class="label" id="resultLabel">Yarhm</div>
 
+    <!-- Login Button -->
+    <button class="login-button" id="loginButton">Login</button>
+
+    <!-- Create Account Button -->
+    <button class="create-account-button" id="createAccountButton">Create Account</button>
+
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
@@ -245,10 +251,8 @@
                 alert(`Login successful! Welcome, ${loggedInUser}.`);
                 loginModal.style.display = 'none';
                 updateUserDisplay();
-                usernameInput.value = '';
-                passwordInput.value = '';
             } else {
-                errorMessage.textContent = 'Password or username wrong, please try again.';
+                errorMessage.textContent = 'Username or password is incorrect. Please try again.';
             }
         });
 
@@ -299,3 +303,4 @@
     </script>
 </body>
 </html>
+
