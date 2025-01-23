@@ -19,6 +19,20 @@
             flex-direction: column; /* Stack items vertically */
         }
 
+        .login-button {
+            position: absolute; /* Position the button relative to the viewport */
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            border: none; /* Remove default border */
+            border-radius: 15px; /* Rounded corners */
+            padding: 10px 20px; /* Padding for the button */
+            font-size: 14px; /* Font size */
+            font-weight: bold; /* Bold text */
+            cursor: pointer; /* Pointer cursor on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
+        }
+
         .rounded-rectangle {
             background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
             border-radius: 15px; /* Rounded corners */
@@ -70,6 +84,7 @@
     </style>
 </head>
 <body>
+    <button class="login-button">Login</button>
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
@@ -119,3 +134,4 @@
     </script>
 </body>
 </html>
+
