@@ -6,7 +6,7 @@
     <title>Background Image</title>
     <style>
         body {
-            background-image: url('https://raw.githubusercontent.com/AlienCheats/_/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
+            background-image: url(https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
             background-size: cover; /* Cover the entire viewport */
             background-position: center; /* Center the image */
             background-repeat: no-repeat; /* No repeat */
