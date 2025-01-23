@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,119 +6,106 @@
     <title>Background Image</title>
     <style>
         body {
-            background-image: url('https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 20px;
-            position: relative;
-        }
-
-        .username-display {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 10px;
-            margin-bottom: 20px;
+            background-color: green; /* Green background */
+            height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove default margin */
+            display: flex; /* Use flexbox for positioning */
+            justify-content: center; /* Center horizontally */
+            align-items: flex-start; /* Align items to the top */
+            padding-top: 50px; /* Add padding to move the rectangle down */
+            flex-direction: column; /* Stack items vertically */
         }
 
         .rounded-rectangle {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            width: 300px;
-            height: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
+            background-color: rgba(210, 180, 140, 0.8); /* Light brown color */
+            border-radius: 15px; /* Rounded corners */
+            width: 300px; /* Width of the rectangle */
+            height: 50px; /* Height of the rectangle (thinner) */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+            display: flex; /* Use flexbox for content alignment */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            margin: 0 auto; /* Center the rectangle */
         }
 
         input {
-            border: none;
-            background: transparent;
-            outline: none;
-            width: 90%;
-            font-size: 16px;
-            padding: 10px;
+            border: none; /* Remove default border */
+            background: transparent; /* Make input background transparent */
+            outline: none; /* Remove outline on focus */
+            width: 90%; /* Width of the input field */
+            font-size: 16px; /* Font size */
+            padding: 10px; /* Padding inside the input */
         }
 
         .message {
-            color: red;
-            text-align: center;
-            margin-top: 20px;
+            color: red; /* Color for the message */
+            text-align: center; /* Center the message */
+            margin-top: 20px; /* Margin above the message */
         }
 
         .results {
-            color: green;
-            text-align: center;
-            margin-top: 10px;
+            color: green; /* Color for the results message */
+            text-align: center; /* Center the results message */
+            margin-top: 10px; /* Margin above the results message */
         }
 
         img {
-            margin-top: 20px;
-            max-width: 300px;
-            border-radius: 15px;
-            display: none;
+            margin-top: 20px; /* Margin above the image */
+            max-width: 300px; /* Maximum width for the image */
+            border-radius: 15px; /* Make the image rounded */
+            display: none; /* Initially hide the image */
         }
 
         .label {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 10px;
-            padding: 10px;
-            display: none;
+            background-color: rgba(210, 180, 140, 0.8); /* Light brown color */
+            border-radius: 10px; /* Rounded corners */
+            text-align: center; /* Center text */
+            margin-top: 10px; /* Margin above the label */
+            padding: 10px; /* Padding inside the label */
+            display: none; /* Initially hide the label */
         }
 
         .login-button, .create-account-button {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            margin: 5px;
-            display: inline-block;
+            background-color: rgba(210, 180, 140, 0.8); /* Light brown color */
+            border-radius: 15px; /* Rounded corners */
+            border: none; /* No border */
+            padding: 10px 15px; /* Padding */
+            color: white; /* Text color */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin: 5px; /* Margin for buttons */
         }
 
         .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            position: fixed; /* Fixed position */
+            top: 0; /* Align to top */
+            left: 0; /* Align to left */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.7); /* Black with transparency */
+            display: none; /* Initially hidden */
+            justify-content: center; /* Center modal content */
+            align-items: center; /* Center modal content */
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
+            background-color: black; /* Black background for modal */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Padding inside modal */
+            text-align: center; /* Center text */
+            color: white; /* Text color */
         }
 
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
+        .modal-input {
+            border: none; /* Remove border */
+            padding: 10px; /* Padding inside input */
+            margin: 10px 0; /* Margin around inputs */
+            border-radius: 5px; /* Rounded corners */
+            width: 80%; /* Width of input */
         }
     </style>
 </head>
 <body>
-    <div id="userDisplay" class="username-display" style="display: none;"></div>
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
@@ -130,137 +117,114 @@
     <button class="login-button" id="loginButton">Login</button>
     <button class="create-account-button" id="createAccountButton">Create Account</button>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
+    <div class="modal" id="modal">
         <div class="modal-content">
-            <span class="close-button" id="closeLoginModal">&times;</span>
-            <h2>Login</h2>
-            <input type="text" id="usernameInput" placeholder="Username">
-            <input type="password" id="passwordInput" placeholder="Password">
-            <button id="submitLogin">Login</button>
-            <div class="message" id="loginErrorMessage"></div>
-        </div>
-    </div>
-
-    <!-- Create Account Modal -->
-    <div id="createAccountModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="closeCreateAccountModal">&times;</span>
-            <h2>Create Account</h2>
-            <input type="text" id="newUsernameInput" placeholder="New Username">
-            <input type="password" id="newPasswordInput" placeholder="New Password">
-            <button id="submitCreateAccount">Create Account</button>
-            <div class="message" id="accountErrorMessage"></div>
-            <div class="message" id="accountSuccessMessage"></div>
+            <div id="modalText"></div>
+            <input type="text" id="usernameInput" class="modal-input" placeholder="Username">
+            <input type="password" id="passwordInput" class="modal-input" placeholder="Password">
+            <button id="submitModalButton">Login</button>
         </div>
     </div>
 
     <script>
-        const accounts = {};
-        let loggedInUser = null;
-
-        const userDisplay = document.getElementById('userDisplay');
-        const loginModal = document.getElementById('loginModal');
-        const createAccountModal = document.getElementById('createAccountModal');
+        const searchInput = document.getElementById('searchInput');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultsMessage = document.getElementById('resultsMessage');
+        const resultImage = document.getElementById('resultImage');
+        const resultLabel = document.getElementById('resultLabel');
         const loginButton = document.getElementById('loginButton');
         const createAccountButton = document.getElementById('createAccountButton');
-        const submitLogin = document.getElementById('submitLogin');
-        const submitCreateAccount = document.getElementById('submitCreateAccount');
-        const loginErrorMessage = document.getElementById('loginErrorMessage');
-        const accountErrorMessage = document.getElementById('accountErrorMessage');
-        const accountSuccessMessage = document.getElementById('accountSuccessMessage');
+        const modal = document.getElementById('modal');
+        const modalText = document.getElementById('modalText');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const submitModalButton = document.getElementById('submitModalButton');
 
-        // Functions to save and load accounts
-        function saveAccounts() {
-            localStorage.setItem('accounts', JSON.stringify(accounts));
-        }
+        let currentUser = null;
+        const accounts = JSON.parse(localStorage.getItem('accounts')) || {};
 
-        function loadAccounts() {
-            const savedAccounts = localStorage.getItem('accounts');
-            if (savedAccounts) {
-                Object.assign(accounts, JSON.parse(savedAccounts));
-            }
-        }
-
-        // Initialize accounts on page load
-        loadAccounts();
-
-        // Handle login button click
-        loginButton.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-        });
-
-        // Handle create account button click
-        createAccountButton.addEventListener('click', () => {
-            createAccountModal.style.display = 'flex';
-        });
-
-        // Handle closing modals
-        document.getElementById('closeLoginModal').addEventListener('click', () => {
-            loginModal.style.display = 'none';
-        });
-        document.getElementById('closeCreateAccountModal').addEventListener('click', () => {
-            createAccountModal.style.display = 'none';
-        });
-
-        // Handle login submission
-        submitLogin.addEventListener('click', () => {
-            const username = document.getElementById('usernameInput').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
-
-            if (accounts[username] && accounts[username] === password) {
-                loggedInUser = username;
-                userDisplay.textContent = `Welcome, ${loggedInUser}!`;
-                userDisplay.style.display = 'block';
-                loginModal.style.display = 'none';
-                createAccountButton.style.display = 'none';
-                loginButton.style.display = 'none';
-            } else {
-                loginErrorMessage.textContent = 'Username or password is incorrect.';
-            }
-        });
-
-        // Handle account creation
-        submitCreateAccount.addEventListener('click', () => {
-            const newUsername = document.getElementById('newUsernameInput').value.trim();
-            const newPassword = document.getElementById('newPasswordInput').value.trim();
-
-            if (accounts[newUsername]) {
-                accountErrorMessage.textContent = 'Username already taken.';
-                accountSuccessMessage.textContent = '';
-            } else {
-                accounts[newUsername] = newPassword;
-                saveAccounts();
-                accountSuccessMessage.textContent = 'Account created successfully!';
-                accountErrorMessage.textContent = '';
-                document.getElementById('newUsernameInput').value = '';
-                document.getElementById('newPasswordInput').value = '';
-            }
-        });
-
-        // Event listener for search input
-        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+        searchInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                const keyword = this.value.trim().toLowerCase();
-                if (keyword === 'mm2') {
-                    document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
-                    document.getElementById('resultImage').style.display = 'block';
-                    document.getElementById('resultLabel').style.display = 'block';
+                const keyword = searchInput.value.trim().toLowerCase();
+                if (keyword === '') {
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = '';
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
+                } else if (keyword === 'mm2') {
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = `Results for "${keyword}"`;
+                    resultImage.style.display = 'block';
+                    resultLabel.style.display = 'block';
                 } else if (keyword === 'fisch') {
-                    document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
-                    document.getElementById('resultImage').style.display = 'none';
-                    document.getElementById('resultLabel').style.display = 'none';
+                    resultMessage.textContent = '';
+                    resultsMessage.textContent = `Results for "${keyword}"`;
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
                 } else {
-                    document.getElementById('resultMessage').textContent = 'Nothing found here';
-                    document.getElementById('resultsMessage').textContent = '';
-                    document.getElementById('resultImage').style.display = 'none';
-                    document.getElementById('resultLabel').style.display = 'none';
+                    resultMessage.textContent = 'Nothing found here';
+                    resultsMessage.textContent = '';
+                    resultImage.style.display = 'none';
+                    resultLabel.style.display = 'none';
                 }
                 this.value = '';
             }
         });
+
+        loginButton.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            modalText.textContent = 'Login';
+            submitModalButton.textContent = 'Login';
+            usernameInput.value = '';
+            passwordInput.value = '';
+        });
+
+        createAccountButton.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            modalText.textContent = 'Create Account';
+            submitModalButton.textContent = 'Create Account';
+            usernameInput.value = '';
+            passwordInput.value = '';
+        });
+
+        submitModalButton.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (modalText.textContent === 'Login') {
+                // Login logic
+                if (accounts[username] && accounts[username] === password) {
+                    currentUser = username;
+                    alert('Login successful');
+                    updateUI();
+                    modal.style.display = 'none';
+                } else {
+                    alert('Username or password wrong. Please try again.');
+                }
+            } else {
+                // Create account logic
+                if (!accounts[username]) {
+                    accounts[username] = password;
+                    localStorage.setItem('accounts', JSON.stringify(accounts));
+                    alert('Account created successfully!');
+                    modal.style.display = 'none';
+                } else {
+                    alert('Username already taken.');
+                }
+            }
+        });
+
+        function updateUI() {
+            if (currentUser) {
+                loginButton.style.display = 'none'; // Hide login button
+                createAccountButton.style.display = 'none'; // Hide create account button
+                const usernameDisplay = document.createElement('div');
+                usernameDisplay.textContent = currentUser; // Display logged-in username
+                usernameDisplay.classList.add('rounded-rectangle'); // Add class for styling
+                document.body.insertBefore(usernameDisplay, modal); // Insert before modal
+            }
+        }
     </script>
 </body>
 </html>
+
