@@ -7,131 +7,135 @@
     <style>
         body {
             background-image: url('https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
-            background-size: cover; /* Cover the entire viewport */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* No repeat */
-            height: 100vh; /* Full viewport height */
-            margin: 0; /* Remove default margin */
-            display: flex; /* Use flexbox for positioning */
-            justify-content: center; /* Center horizontally */
-            align-items: flex-start; /* Align items to the top */
-            padding-top: 50px; /* Add padding to move the rectangle down */
-            flex-direction: column; /* Stack items vertically */
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding-top: 50px; 
+            flex-direction: column; 
         }
 
         .login-button {
-            position: absolute; /* Position the button relative to the viewport */
-            top: 10px; /* Distance from the top */
-            right: 10px; /* Distance from the right */
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-            border: none; /* Remove default border */
-            border-radius: 15px; /* Rounded corners */
-            padding: 10px 20px; /* Padding for the button */
-            font-size: 14px; /* Font size */
-            font-weight: bold; /* Bold text */
-            cursor: pointer; /* Pointer cursor on hover */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background-color: rgba(255, 255, 255, 0.8); 
+            border: none; 
+            border-radius: 15px; 
+            padding: 10px 20px; 
+            font-size: 14px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
         }
 
-        .rounded-rectangle {
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-            border-radius: 15px; /* Rounded corners */
-            width: 300px; /* Width of the rectangle */
-            height: 50px; /* Height of the rectangle (thinner) */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
-            display: flex; /* Use flexbox for content alignment */
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-            margin: 0 auto; /* Center the rectangle */
+        /* Login modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        input {
-            border: none; /* Remove default border */
-            background: transparent; /* Make input background transparent */
-            outline: none; /* Remove outline on focus */
-            width: 90%; /* Width of the input field */
-            font-size: 16px; /* Font size */
-            padding: 10px; /* Padding inside the input */
+        .modal-content {
+            background-color: black;
+            border-radius: 15px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
         }
 
-        .message {
-            color: red; /* Color for the message */
-            text-align: center; /* Center the message */
-            margin-top: 20px; /* Margin above the message */
+        .modal-content input {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #ddd;
         }
 
-        .results {
-            color: green; /* Color for the results message */
-            text-align: center; /* Center the results message */
-            margin-top: 10px; /* Margin above the results message */
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background-color: #444;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
         }
 
-        img {
-            margin-top: 20px; /* Margin above the image */
-            max-width: 300px; /* Maximum width for the image */
-            border-radius: 15px; /* Make the image rounded */
-            display: none; /* Initially hide the image */
-        }
-
-        .label {
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-            border-radius: 10px; /* Rounded corners */
-            text-align: center; /* Center text */
-            margin-top: 10px; /* Margin above the label */
-            padding: 10px; /* Padding inside the label */
-            display: none; /* Initially hide the label */
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <button class="login-button">Login</button>
-    <div class="rounded-rectangle">
-        <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
+    <button class="login-button" id="loginButton">Login</button>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <input type="text" id="usernameInput" placeholder="Username">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="submitLogin">Login</button>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
     </div>
-    <div class="message" id="resultMessage"></div>
-    <div class="results" id="resultsMessage"></div>
-    <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image">
-    <div class="label" id="resultLabel">Yarhm</div>
 
     <script>
-        const searchInput = document.getElementById('searchInput');
-        const resultMessage = document.getElementById('resultMessage');
-        const resultsMessage = document.getElementById('resultsMessage');
-        const resultImage = document.getElementById('resultImage');
-        const resultLabel = document.getElementById('resultLabel');
+        const loginButton = document.getElementById('loginButton');
+        const loginModal = document.getElementById('loginModal');
+        const submitLogin = document.getElementById('submitLogin');
+        const errorMessage = document.getElementById('errorMessage');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
 
-        searchInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                const keyword = searchInput.value.trim().toLowerCase();
-                
-                // Check for specific keywords
-                if (keyword === '') {
-                    resultMessage.textContent = ''; // Clear message if input is empty
-                    resultsMessage.textContent = ''; // Clear results if input is empty
-                    resultImage.style.display = 'none'; // Hide image if input is empty
-                    resultLabel.style.display = 'none'; // Hide label if input is empty
-                } else if (keyword === 'mm2') {
-                    resultMessage.textContent = ''; // Clear previous messages
-                    resultsMessage.textContent = `Results for "${keyword}"`; // Display results for the keyword
-                    resultImage.style.display = 'block'; // Show image for mm2
-                    resultLabel.style.display = 'block'; // Show label for mm2
-                } else if (keyword === 'fisch') {
-                    resultMessage.textContent = ''; // Clear previous messages
-                    resultsMessage.textContent = `Results for "${keyword}"`; // Display results for the keyword
-                    resultImage.style.display = 'none'; // Hide image for fisch (or you can set a different image if needed)
-                    resultLabel.style.display = 'none'; // Hide label for fisch
-                } else {
-                    resultMessage.textContent = 'Nothing found here'; // Display message for no results
-                    resultsMessage.textContent = ''; // Clear results if no match
-                    resultImage.style.display = 'none'; // Hide image if no match
-                    resultLabel.style.display = 'none'; // Hide label if no match
-                }
+        const validCredentials = {
+            username: 'admin',
+            password: 'password123'
+        };
 
-                // Clear the input field after search
-                searchInput.value = '';
+        // Show login modal
+        loginButton.addEventListener('click', () => {
+            loginModal.style.display = 'flex'; // Show the modal
+        });
+
+        // Handle login
+        submitLogin.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username === validCredentials.username && password === validCredentials.password) {
+                errorMessage.textContent = ''; // Clear any error messages
+                alert('Login successful!');
+                loginModal.style.display = 'none'; // Hide the modal
+                usernameInput.value = ''; // Clear input fields
+                passwordInput.value = '';
+            } else {
+                errorMessage.textContent = 'Password or username wrong, please try again.';
+            }
+        });
+
+        // Hide the modal when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
             }
         });
     </script>
 </body>
 </html>
+
 
