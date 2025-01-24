@@ -117,6 +117,66 @@
             text-align: center;
         }
 
+        .upload-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+
+        .file-input-container {
+            margin: 20px 0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .file-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .selected-file {
+            margin-top: 15px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
         .message, .results {
             margin: 15px 0;
             font-weight: 500;
@@ -226,8 +286,28 @@
         <button class="logout-button" id="logoutButton" style="display: none;">Log Out</button>
     </div>
 
-    <div class="rounded-rectangle">
+    <div class="rounded-rectangle" id="searchContainer">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
+    </div>
+
+    <div class="upload-container" id="uploadContainer">
+        <h2>Upload Your Script</h2>
+        
+        <div class="file-input-container">
+            <input type="file" id="scriptFile" class="file-input" accept=".lua,.txt">
+            <label for="scriptFile" class="file-label">Choose File</label>
+            <div class="selected-file" id="selectedFileName">No file chosen</div>
+        </div>
+
+        <div class="rounded-rectangle">
+            <input type="text" id="scriptName" placeholder="Script name...">
+        </div>
+        
+        <div class="rounded-rectangle">
+            <input type="text" id="scriptDescription" placeholder="Script description...">
+        </div>
+        
+        <button class="upload-button">Upload Script</button>
     </div>
 
     <div class="results-container">
@@ -283,6 +363,9 @@
         const accountErrorMessage = document.getElementById('accountErrorMessage');
         const accountSuccessMessage = document.getElementById('accountSuccessMessage');
         const uploadScriptsButton = document.getElementById('uploadScriptsButton');
+        const searchContainer = document.getElementById('searchContainer');
+        const uploadContainer = document.getElementById('uploadContainer');
+        const resultsContainer = document.querySelector('.results-container');
 
         function saveAccounts() {
             localStorage.setItem('accounts', JSON.stringify(accounts));
@@ -328,6 +411,9 @@
             createAccountButton.style.display = 'inline-block';
             uploadScriptsButton.style.display = 'none';
             logoutButton.style.display = 'none';
+            uploadContainer.style.display = 'none';
+            searchContainer.style.display = 'flex';
+            resultsContainer.style.display = 'block';
         }
 
         loadAccounts();
@@ -386,7 +472,27 @@
         });
 
         uploadScriptsButton.addEventListener('click', () => {
-            alert('Upload Scripts feature coming soon!');
+            uploadContainer.style.display = 'block';
+            searchContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
+        });
+
+        const fileInput = document.getElementById('scriptFile');
+        const fileNameDisplay = document.getElementById('selectedFileName');
+        
+        fileInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'No file chosen';
+            }
+        });
+
+        document.querySelector('.upload-button').addEventListener('click', function() {
+            alert('Upload successful!');
+            uploadContainer.style.display = 'none';
+            searchContainer.style.display = 'flex';
+            resultsContainer.style.display = 'block';
         });
 
         document.getElementById('searchInput').addEventListener('keypress', function(event) {
