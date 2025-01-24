@@ -4,334 +4,316 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Script Search</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #0ea5e9;
+            --primary-color: #6366f1;
+            --secondary-color: #10b981;
             --accent-color: #f43f5e;
             --text-color: #1f2937;
-            --background-color: #f8fafc;
-            --card-bg: #ffffff;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 1rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --modal-bg: rgba(255, 255, 255, 0.95);
+            --gradient-start: #2563eb;
+            --gradient-end: #7c3aed;
         }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-color);
-            line-height: 1.5;
-            min-height: 100vh;
-            padding-top: 60px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Header & Navigation */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem;
-            box-shadow: var(--shadow-md);
-            z-index: 1000;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-attachment: fixed;
+            height: 100vh;
+            margin: 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .manage-scripts-button {
-            background: var(--card-bg);
-            border: none;
-            border-radius: var(--radius-lg);
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--primary-color);
-            transition: all 0.3s ease;
+            padding: 40px 20px;
+            position: relative;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--text-color);
         }
 
         .username-display {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--gradient-start);
+            letter-spacing: 0.5px;
         }
 
-        /* Search Container */
-        .search-container {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 1rem;
-            margin: 2rem auto;
-            max-width: 600px;
-            box-shadow: var(--shadow-lg);
+        .rounded-rectangle {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            width: 400px;
+            height: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
         }
 
-        .search-input {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid transparent;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            transition: all 0.3s ease;
+        .rounded-rectangle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
 
-        .search-input:focus {
+        input {
+            border: none;
+            background: transparent;
             outline: none;
-            border-color: var(--primary-color);
+            width: 90%;
+            font-size: 16px;
+            padding: 15px 25px;
+            color: var(--text-color);
         }
 
-        /* Script Cards */
+        input::placeholder {
+            color: #6b7280;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .login-button, .create-account-button, .upload-scripts-button, .logout-button {
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            color: var(--gradient-start);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-button:hover, .create-account-button:hover, 
+        .upload-scripts-button:hover, .logout-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+
+        .results-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .upload-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            display: none;
+        }
+
+        .script-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        .script-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .uploader-info {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
         .script-card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s ease;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .script-card:hover {
             transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-        /* Rating System */
-        .rating-container {
-            margin: 1rem 0;
-        }
-
-        .stars {
-            color: #ffd700;
-            font-size: 1.25rem;
-            cursor: pointer;
-        }
-
-        .stars i {
-            margin-right: 0.25rem;
-        }
-
-        /* Comments Section */
-        .comments-section {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
+        .script-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .comment-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e5e7eb;
-            border-radius: var(--radius-md);
-            margin-bottom: 1rem;
-            resize: vertical;
+        .get-script-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        /* Version History */
-        .version-history {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.02);
-            border-radius: var(--radius-md);
+        .get-script-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .version-item {
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        /* Tags */
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-        }
-
-        .tag {
-            background: rgba(79, 70, 229, 0.1);
-            color: var(--primary-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-        }
-
-        /* Modal Styles */
         .modal {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: var(--radius-lg);
-            max-width: 500px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             width: 90%;
-            margin: 50px auto;
+            max-width: 400px;
             position: relative;
         }
 
         .close-button {
             position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
             cursor: pointer;
-            color: var(--text-color);
+            color: #6b7280;
+            transition: color 0.3s ease;
         }
 
-        /* Buttons */
-        .button {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
+        .close-button:hover {
+            color: var(--accent-color);
+        }
+
+        .message {
+            margin: 15px 0;
             font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .button-primary {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .button-secondary {
-            background: var(--secondary-color);
-            color: white;
-        }
-
-        /* Manage Scripts Container */
-        .manage-container {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin-top: 2rem;
-            box-shadow: var(--shadow-lg);
-            display: none;
-        }
-
-        /* Upload Container */
-        .upload-container {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            margin-top: 2rem;
-            box-shadow: var(--shadow-lg);
-            display: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 20px auto;
-            }
-            
-            .button {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
+            color: var(--text-color);
         }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <button id="manageScriptsButton" class="manage-scripts-button" style="display: none;">
-            <i class="fas fa-cog"></i> Manage Scripts
-        </button>
-        <div id="userDisplay" class="username-display" style="display: none;"></div>
+    <div id="userDisplay" class="username-display" style="display: none;"></div>
+    
+    <div class="button-container">
+        <button class="upload-scripts-button" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
+        <button class="logout-button" id="logoutButton" style="display: none;">Log Out</button>
     </div>
 
-    <div class="container">
-        <!-- Button Container -->
-        <div class="button-container">
-            <button class="button button-primary" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
-            <button class="button button-secondary" id="logoutButton" style="display: none;">Log Out</button>
-            <button class="button button-primary" id="loginButton">Login</button>
-            <button class="button button-secondary" id="createAccountButton">Create Account</button>
+    <div class="rounded-rectangle" id="searchContainer">
+        <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
+    </div>
+
+    <div class="upload-container" id="uploadContainer">
+        <h2>Upload Your Script</h2>
+        
+        <div class="script-input-container">
+            <textarea id="scriptText" placeholder="Paste your script here..." class="script-textarea"></textarea>
         </div>
 
-        <!-- Search Container -->
-        <div class="search-container" id="searchContainer">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search scripts with keywords...">
+        <div class="keyword-selector">
+            <select id="scriptKeyword" class="script-select">
+                <option value="">Select a keyword...</option>
+                <option value="mm2">MM2</option>
+                <option value="arsenal">Arsenal</option>
+                <option value="blox">Blox Fruits</option>
+                <option value="pet">Pet Simulator</option>
+            </select>
         </div>
 
-        <!-- Manage Scripts Container -->
-        <div id="manageScriptsContainer" class="manage-container">
-            <h2>Your Scripts</h2>
-            <div id="userScriptsList"></div>
+        <div class="rounded-rectangle">
+            <input type="text" id="scriptName" placeholder="Script name...">
         </div>
-
-        <!-- Upload Container -->
-        <div class="upload-container" id="uploadContainer">
-            <h2>Upload Your Script</h2>
-            
-            <div class="script-input-container">
-                <textarea id="scriptText" placeholder="Paste your script here..." class="comment-input"></textarea>
-            </div>
-
-            <div class="tag-selector">
-                <select multiple id="scriptTags" class="search-input">
-                    <option value="mm2">MM2</option>
-                    <option value="arsenal">Arsenal</option>
-                    <option value="blox">Blox Fruits</option>
-                    <option value="pet">Pet Simulator</option>
-                    <option value="combat">Combat</option>
-                    <option value="farm">Farm</option>
-                    <option value="auto">Auto</option>
-                    <option value="gui">GUI</option>
-                </select>
-            </div>
-
-            <div class="version-input">
-                <input type="text" id="scriptVersion" placeholder="Version (e.g., 1.0.0)" class="search-input">
-                <textarea id="changelog" placeholder="Changelog (What's new in this version?)" class="comment-input"></textarea>
-            </div>
-
-            <input type="text" id="scriptName" placeholder="Script name..." class="search-input">
-            <textarea id="scriptDescription" placeholder="Script description..." class="comment-input"></textarea>
-            
-            <button class="button button-primary upload-button">Upload Script</button>
+        
+        <div class="rounded-rectangle">
+            <input type="text" id="scriptDescription" placeholder="Script description...">
         </div>
+        
+        <button class="upload-button">Upload Script</button>
+    </div>
 
-        <!-- Results Container -->
-        <div class="results-container">
-            <div id="resultMessage" class="message"></div>
-            <div id="resultsMessage" class="results"></div>
-        </div>
+    <div class="results-container">
+        <div class="message" id="resultMessage"></div>
+        <div class="results" id="resultsMessage"></div>
+    </div>
+
+    <div class="button-container">
+        <button class="login-button" id="loginButton">Login</button>
+        <button class="create-account-button" id="createAccountButton">Create Account</button>
     </div>
 
     <!-- Login Modal -->
@@ -339,10 +321,10 @@
         <div class="modal-content">
             <span class="close-button" id="closeLoginModal">&times;</span>
             <h2>Login</h2>
-            <input type="text" id="usernameInput" class="search-input" placeholder="Username">
-            <input type="password" id="passwordInput" class="search-input" placeholder="Password">
-            <button id="submitLogin" class="button button-primary">Login</button>
-            <div id="loginErrorMessage" class="message"></div>
+            <input type="text" id="usernameInput" placeholder="Username">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="submitLogin" class="login-button">Login</button>
+            <div class="message" id="loginErrorMessage"></div>
         </div>
     </div>
 
@@ -351,22 +333,27 @@
         <div class="modal-content">
             <span class="close-button" id="closeCreateAccountModal">&times;</span>
             <h2>Create Account</h2>
-            <input type="text" id="newUsernameInput" class="search-input" placeholder="New Username">
-            <input type="password" id="newPasswordInput" class="search-input" placeholder="New Password">
-            <button id="submitCreateAccount" class="button button-primary">Create Account</button>
-            <div id="accountErrorMessage" class="message"></div>
-            <div id="accountSuccessMessage" class="message"></div>
+            <input type="text" id="newUsernameInput" placeholder="New Username">
+            <input type="password" id="newPasswordInput" placeholder="New Password">
+            <button id="submitCreateAccount" class="create-account-button">Create Account</button>
+            <div class="message" id="accountErrorMessage"></div>
+            <div class="message" id="accountSuccessMessage"></div>
         </div>
     </div>
 
     <script>
-        // Initialize storage objects
-        const accounts = JSON.parse(localStorage.getItem('accounts')) || {};
+        const accounts = {};
         let loggedInUser = null;
-        const scripts = JSON.parse(localStorage.getItem('scripts')) || [];
-        const userFavorites = JSON.parse(localStorage.getItem('userFavorites')) || {};
-        const scriptRatings = JSON.parse(localStorage.getItem('scriptRatings')) || {};
-        const scriptComments = JSON.parse(localStorage.getItem('scriptComments')) || {};
+        const scripts = JSON.parse(localStorage.getItem('scripts') || '[]');
+
+        // Load existing accounts from localStorage
+        function loadAccounts() {
+            const savedAccounts = localStorage.getItem('accounts');
+            if (savedAccounts) {
+                Object.assign(accounts, JSON.parse(savedAccounts));
+            }
+        }
+        loadAccounts();
 
         // DOM Elements
         const userDisplay = document.getElementById('userDisplay');
@@ -376,8 +363,6 @@
         const logoutButton = document.getElementById('logoutButton');
         const createAccountButton = document.getElementById('createAccountButton');
         const uploadScriptsButton = document.getElementById('uploadScriptsButton');
-        const manageScriptsButton = document.getElementById('manageScriptsButton');
-        const manageScriptsContainer = document.getElementById('manageScriptsContainer');
         const searchContainer = document.getElementById('searchContainer');
         const uploadContainer = document.getElementById('uploadContainer');
         const resultsContainer = document.querySelector('.results-container');
@@ -390,6 +375,7 @@
                 updateUIForLoggedInUser();
             }
         }
+        checkLoginState();
 
         // UI Update Functions
         function updateUIForLoggedInUser() {
@@ -399,7 +385,6 @@
             createAccountButton.style.display = 'none';
             uploadScriptsButton.style.display = 'inline-block';
             logoutButton.style.display = 'inline-block';
-            manageScriptsButton.style.display = 'block';
         }
 
         function logout() {
@@ -410,27 +395,18 @@
             createAccountButton.style.display = 'inline-block';
             uploadScriptsButton.style.display = 'none';
             logoutButton.style.display = 'none';
-            manageScriptsButton.style.display = 'none';
             uploadContainer.style.display = 'none';
-            manageScriptsContainer.style.display = 'none';
-            searchContainer.style.display = 'block';
+            searchContainer.style.display = 'flex';
             resultsContainer.style.display = 'block';
         }
 
         // Event Listeners
-        loginButton.addEventListener('click', () => loginModal.style.display = 'block');
-        createAccountButton.addEventListener('click', () => createAccountModal.style.display = 'block');
+        loginButton.addEventListener('click', () => loginModal.style.display = 'flex');
+        createAccountButton.addEventListener('click', () => createAccountModal.style.display = 'flex');
         logoutButton.addEventListener('click', logout);
+        document.getElementById('closeLoginModal').addEventListener('click', () => loginModal.style.display = 'none');
+        document.getElementById('closeCreateAccountModal').addEventListener('click', () => createAccountModal.style.display = 'none');
 
-        // Close modal buttons
-        document.querySelectorAll('.close-button').forEach(button => {
-            button.addEventListener('click', () => {
-                loginModal.style.display = 'none';
-                createAccountModal.style.display = 'none';
-            });
-        });
-
-        // Login functionality
         document.getElementById('submitLogin').addEventListener('click', () => {
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -440,123 +416,146 @@
                 localStorage.setItem('loggedInUser', username);
                 updateUIForLoggedInUser();
                 loginModal.style.display = 'none';
+                document.getElementById('usernameInput').value = '';
+                document.getElementById('passwordInput').value = '';
                 document.getElementById('loginErrorMessage').textContent = '';
             } else {
-                document.getElementById('loginErrorMessage').textContent = 'Invalid username or password';
+                document.getElementById('loginErrorMessage').textContent = 'Username or password is incorrect.';
             }
         });
 
-        // Create Account functionality
         document.getElementById('submitCreateAccount').addEventListener('click', () => {
             const newUsername = document.getElementById('newUsernameInput').value.trim();
             const newPassword = document.getElementById('newPasswordInput').value.trim();
 
             if (accounts[newUsername]) {
-                document.getElementById('accountErrorMessage').textContent = 'Username already taken';
+                document.getElementById('accountErrorMessage').textContent = 'Username already taken.';
+                document.getElementById('accountSuccessMessage').textContent = '';
             } else {
                 accounts[newUsername] = newPassword;
                 localStorage.setItem('accounts', JSON.stringify(accounts));
                 document.getElementById('accountSuccessMessage').textContent = 'Account created successfully!';
-                setTimeout(() => {
-                    createAccountModal.style.display = 'none';
-                    document.getElementById('accountSuccessMessage').textContent = '';
-                }, 1500);
+                document.getElementById('accountErrorMessage').textContent = '';
+                document.getElementById('newUsernameInput').value = '';
+                document.getElementById('newPasswordInput').value = '';
             }
         });
 
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        uploadScriptsButton.addEventListener('click', () => {
+            uploadContainer.style.display = 'block';
+            searchContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
+        });
+
+        document.querySelector('.upload-button').addEventListener('click', function() {
+            const scriptText = document.getElementById('scriptText').value;
+            const keyword = document.getElementById('scriptKeyword').value;
+            const name = document.getElementById('scriptName').value;
+            const description = document.getElementById('scriptDescription').value;
+
+            if (!scriptText || !keyword || !name || !description) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            scripts.push({
+                text: scriptText,
+                keyword: keyword,
+                name: name,
+                description: description,
+                uploader: loggedInUser
+            });
+
+            localStorage.setItem('scripts', JSON.stringify(scripts));
+            
+            alert('Script uploaded successfully!');
+            uploadContainer.style.display = 'none';
+            searchContainer.style.display = 'flex';
+            resultsContainer.style.display = 'block';
+            
+            document.getElementById('scriptText').value = '';
+            document.getElementById('scriptKeyword').value = '';
+            document.getElementById('scriptName').value = '';
+            document.getElementById('scriptDescription').value = '';
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
-                const searchTerm = this.value.toLowerCase().trim();
-                const filteredScripts = scripts.filter(script => 
-                    script.name.toLowerCase().includes(searchTerm) ||
-                    script.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                const keyword = this.value.trim().toLowerCase();
+                const matchingScripts = scripts.filter(script => 
+                    script.keyword.toLowerCase() === keyword
                 );
-                displayScripts(filteredScripts);
+
+                const resultsContainer = document.getElementById('resultsMessage');
+                resultsContainer.innerHTML = '';
+
+                if (matchingScripts.length > 0) {
+                    matchingScripts.forEach(script => {
+                        const escapedText = script.text
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/'/g, '&#039;')
+                            .replace(/`/g, '&#096;');
+
+                        const scriptCard = document.createElement('div');
+                        scriptCard.className = 'script-card';
+                        scriptCard.innerHTML = `
+                            <h3>${script.name}</h3>
+                            <p class="uploader-info">Uploaded by: ${script.uploader || 'Unknown'}</p>
+                            <div class="script-details">
+                                <p>${script.description}</p>
+                                <button class="get-script-btn" data-script="${escapedText}">Get Script</button>
+                            </div>
+                        `;
+                        
+                        const getScriptBtn = scriptCard.querySelector('.get-script-btn');
+                        getScriptBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const scriptText = this.getAttribute('data-script');
+                            copyScript(scriptText, script.name);
+                        });
+
+                        scriptCard.addEventListener('click', function(e) {
+                            if (!e.target.classList.contains('get-script-btn')) {
+                                const details = this.querySelector('.script-details');
+                                details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                            }
+                        });
+
+                        resultsContainer.appendChild(scriptCard);
+                    });
+                } else {
+                    resultsContainer.innerHTML = 'No scripts found for this keyword';
+                }
+                
+                this.value = '';
             }
         });
 
-        // Display scripts function
-        function displayScripts(scriptsToDisplay) {
-            const resultsDiv = document.getElementById('resultsMessage');
-            resultsDiv.innerHTML = '';
+        function copyScript(text, scriptName) {
+            const decodedText = text
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#039;/g, "'")
+                .replace(/&#096;/g, '`');
 
-            scriptsToDisplay.forEach(script => {
-                const scriptCard = createScriptCard(script);
-                resultsDiv.appendChild(scriptCard);
+            navigator.clipboard.writeText(decodedText).then(() => {
+                const notification = document.createElement('div');
+                notification.className = 'copy-notification';
+                notification.textContent = `"${scriptName}" copied to clipboard!`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy script to clipboard');
             });
         }
-
-        // Create script card function
-        function createScriptCard(script) {
-            const card = document.createElement('div');
-            card.className = 'script-card';
-            
-            const rating = calculateAverageRating(script.id);
-            
-            card.innerHTML = `
-                <div class="script-header">
-                    <h3>${script.name}</h3>
-                    <button class="favorite-btn" onclick="toggleFavorite('${script.id}')">
-                        <i class="fas fa-heart ${isScriptFavorited(script.id) ? 'favorited' : ''}"></i>
-                    </button>
-                </div>
-                <p>${script.description}</p>
-                <div class="tags-container">
-                    ${script.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-                <div class="rating-container">
-                    <div class="stars" data-script-id="${script.id}">
-                        ${generateStars(rating)}
-                    </div>
-                    <span>(${rating}/5)</span>
-                </div>
-                <div class="version-history">
-                    <p>Version: ${script.version}</p>
-                    <p>Updated: ${new Date(script.dateUploaded).toLocaleDateString()}</p>
-                </div>
-                <div class="comments-section">
-                    <textarea class="comment-input" placeholder="Add a comment..."></textarea>
-                    <button class="button button-primary" onclick="addComment('${script.id}')">Post Comment</button>
-                    <div class="comments-list">
-                        ${generateComments(script.id)}
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-
-        // Utility functions
-        function calculateAverageRating(scriptId) {
-            const ratings = scriptRatings[scriptId] || [];
-            if (ratings.length === 0) return 0;
-            return (ratings.reduce((sum, r) => sum + r, 0) / ratings.length).toFixed(1);
-        }
-
-        function generateStars(rating) {
-            return Array(5).fill(0).map((_, i) => 
-                `<i class="fas fa-star ${i < rating ? 'filled' : ''}"></i>`
-            ).join('');
-        }
-
-        function isScriptFavorited(scriptId) {
-            return userFavorites[loggedInUser]?.includes(scriptId) || false;
-        }
-
-        function generateComments(scriptId) {
-            const comments = scriptComments[scriptId] || [];
-            return comments.map(comment => `
-                <div class="comment">
-                    <strong>${comment.user}</strong>
-                    <span>${new Date(comment.date).toLocaleDateString()}</span>
-                    <p>${comment.text}</p>
-                </div>
-            `).join('');
-        }
-
-        // Initialize the application
-        checkLoginState();
     </script>
 </body>
 </html>
