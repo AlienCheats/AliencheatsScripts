@@ -152,7 +152,39 @@
             cursor: pointer;
         }
 
+        .uploader-info {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
         .script-card {
+            text-align: left;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 20px;
@@ -184,22 +216,9 @@
             margin-top: 10px;
         }
 
-        .upload-button {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .upload-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        .get-script-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .modal {
@@ -463,7 +482,8 @@
                 text: scriptText,
                 keyword: keyword,
                 name: name,
-                description: description
+                description: description,
+                uploader: loggedInUser
             });
 
             localStorage.setItem('scripts', JSON.stringify(scripts));
@@ -473,7 +493,6 @@
             searchContainer.style.display = 'flex';
             resultsContainer.style.display = 'block';
             
-            // Clear inputs
             document.getElementById('scriptText').value = '';
             document.getElementById('scriptKeyword').value = '';
             document.getElementById('scriptName').value = '';
@@ -496,15 +515,18 @@
                         scriptCard.className = 'script-card';
                         scriptCard.innerHTML = `
                             <h3>${script.name}</h3>
+                            <p class="uploader-info">Uploaded by: ${script.uploader}</p>
                             <div class="script-details">
                                 <p>${script.description}</p>
-                                <button class="get-script-btn" onclick="copyScript('${script.text}')">Get Script</button>
+                                <button class="get-script-btn" onclick="copyScript('${script.text}', '${script.name}')">Get Script</button>
                             </div>
                         `;
                         
-                        scriptCard.addEventListener('click', function() {
-                            const details = this.querySelector('.script-details');
-                            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                        scriptCard.addEventListener('click', function(e) {
+                            if (!e.target.classList.contains('get-script-btn')) {
+                                const details = this.querySelector('.script-details');
+                                details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                            }
                         });
 
                         resultsContainer.appendChild(scriptCard);
@@ -517,9 +539,19 @@
             }
         });
 
-        function copyScript(text) {
-            navigator.clipboard.writeText(text);
-            alert('Script copied to clipboard!');
+        function copyScript(text, scriptName) {
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.createElement('div');
+                notification.className = 'copy-notification';
+                notification.textContent = `"${scriptName}" copied to clipboard!`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy script to clipboard');
+            });
         }
     </script>
 </body>
