@@ -116,7 +116,7 @@
             animation: fadeIn 0.3s ease;
         }
 
-        .login-button, .create-account-button, .upload-scripts-button {
+        .login-button, .create-account-button, .upload-scripts-button, .logout-button {
             background: linear-gradient(145deg, var(--primary-color), #357abd);
             border: none;
             border-radius: 25px;
@@ -141,7 +141,12 @@
             box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
         }
 
-        .login-button:hover, .create-account-button:hover, .upload-scripts-button:hover {
+        .logout-button {
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .login-button:hover, .create-account-button:hover, .upload-scripts-button:hover, .logout-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
             filter: brightness(1.1);
@@ -221,6 +226,7 @@
 <body>
     <div id="userDisplay" class="username-display" style="display: none;"></div>
     <button class="upload-scripts-button" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
+    <button class="logout-button" id="logoutButton" style="display: none;">Log Out</button>
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
@@ -265,6 +271,7 @@
         const loginModal = document.getElementById('loginModal');
         const createAccountModal = document.getElementById('createAccountModal');
         const loginButton = document.getElementById('loginButton');
+        const logoutButton = document.getElementById('logoutButton');
         const createAccountButton = document.getElementById('createAccountButton');
         const submitLogin = document.getElementById('submitLogin');
         const submitCreateAccount = document.getElementById('submitCreateAccount');
@@ -284,7 +291,44 @@
             }
         }
 
+        function saveLoginState(username) {
+            localStorage.setItem('loggedInUser', username);
+        }
+
+        function clearLoginState() {
+            localStorage.removeItem('loggedInUser');
+        }
+
+        function checkLoginState() {
+            const savedUser = localStorage.getItem('loggedInUser');
+            if (savedUser && accounts[savedUser]) {
+                loggedInUser = savedUser;
+                updateUIForLoggedInUser();
+            }
+        }
+
+        function updateUIForLoggedInUser() {
+            userDisplay.textContent = `Welcome, ${loggedInUser}!`;
+            userDisplay.style.display = 'block';
+            loginButton.style.display = 'none';
+            createAccountButton.style.display = 'none';
+            uploadScriptsButton.style.display = 'inline-block';
+            logoutButton.style.display = 'inline-block';
+        }
+
+        function logout() {
+            loggedInUser = null;
+            clearLoginState();
+            userDisplay.style.display = 'none';
+            loginButton.style.display = 'inline-block';
+            createAccountButton.style.display = 'inline-block';
+            uploadScriptsButton.style.display = 'none';
+            logoutButton.style.display = 'none';
+        }
+
+        // Initialize on page load
         loadAccounts();
+        checkLoginState();
 
         loginButton.addEventListener('click', () => {
             loginModal.style.display = 'flex';
@@ -294,9 +338,12 @@
             createAccountModal.style.display = 'flex';
         });
 
+        logoutButton.addEventListener('click', logout);
+
         document.getElementById('closeLoginModal').addEventListener('click', () => {
             loginModal.style.display = 'none';
         });
+
         document.getElementById('closeCreateAccountModal').addEventListener('click', () => {
             createAccountModal.style.display = 'none';
         });
@@ -307,12 +354,12 @@
 
             if (accounts[username] && accounts[username] === password) {
                 loggedInUser = username;
-                userDisplay.textContent = `Welcome, ${loggedInUser}!`;
-                userDisplay.style.display = 'block';
+                saveLoginState(username);
+                updateUIForLoggedInUser();
                 loginModal.style.display = 'none';
-                createAccountButton.style.display = 'none';
-                loginButton.style.display = 'none';
-                uploadScriptsButton.style.display = 'inline-block';
+                document.getElementById('usernameInput').value = '';
+                document.getElementById('passwordInput').value = '';
+                loginErrorMessage.textContent = '';
             } else {
                 loginErrorMessage.textContent = 'Username or password is incorrect.';
             }
