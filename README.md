@@ -210,7 +210,7 @@
 
             if (accounts[username] && accounts[username] === password) {
                 loggedInUser = username;
-                userDisplay.textContent = Welcome, ${loggedInUser}!;
+                userDisplay.textContent = `Welcome, ${loggedInUser}!`;
                 userDisplay.style.display = 'block';
                 loginModal.style.display = 'none';
                 createAccountButton.style.display = 'none';
@@ -244,12 +244,12 @@
                 const keyword = this.value.trim().toLowerCase();
                 if (keyword === 'mm2') {
                     document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = Results for "${keyword}";
+                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
                     document.getElementById('resultImage').style.display = 'block';
                     document.getElementById('resultLabel').style.display = 'block';
                 } else if (keyword === 'fisch') {
                     document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = Results for "${keyword}";
+                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
                     document.getElementById('resultImage').style.display = 'none';
                     document.getElementById('resultLabel').style.display = 'none';
                 } else {
