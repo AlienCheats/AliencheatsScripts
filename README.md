@@ -1,10 +1,18 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Background Image</title>
     <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --text-color: #2c3e50;
+            --modal-bg: rgba(255, 255, 255, 0.95);
+        }
+
         body {
             background-image: url('https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
             background-size: cover;
@@ -17,25 +25,40 @@
             align-items: flex-start;
             padding: 20px;
             position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
         }
 
         .username-display {
-            background-color: rgba(255, 255, 255, 0.8);
+            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
             border-radius: 15px;
-            padding: 10px;
+            padding: 12px 20px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            color: var(--primary-color);
         }
 
         .rounded-rectangle {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            width: 300px;
-            height: 50px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
+            border-radius: 25px;
+            width: 350px;
+            height: 55px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .rounded-rectangle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         input {
@@ -44,19 +67,28 @@
             outline: none;
             width: 90%;
             font-size: 16px;
-            padding: 10px;
+            padding: 15px;
+            color: var(--text-color);
+        }
+
+        input::placeholder {
+            color: #95a5a6;
         }
 
         .message {
-            color: red;
+            color: var(--accent-color);
             text-align: center;
             margin-top: 20px;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
         }
 
         .results {
-            color: green;
+            color: var(--secondary-color);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
         }
 
         img {
@@ -64,34 +96,55 @@
             max-width: 300px;
             border-radius: 15px;
             display: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.02);
         }
 
         .label {
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
+            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
+            border-radius: 12px;
             text-align: center;
-            margin-top: 10px;
-            padding: 10px;
+            margin-top: 15px;
+            padding: 12px 20px;
             display: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.3s ease;
         }
 
         .login-button, .create-account-button, .upload-scripts-button {
-            background-color: rgba(255, 255, 255, 0.8);
+            background: linear-gradient(145deg, var(--primary-color), #357abd);
             border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
+            border-radius: 25px;
+            padding: 12px 25px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            margin: 5px;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+            margin: 8px;
             display: inline-block;
+            color: white;
+            transition: all 0.3s ease;
         }
 
-        .upload-scripts-button:hover {
-            background-color: rgba(240, 240, 240, 0.9);
-            transform: translateY(-1px);
-            transition: all 0.2s ease;
+        .create-account-button {
+            background: linear-gradient(145deg, var(--secondary-color), #27ae60);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .upload-scripts-button {
+            background: linear-gradient(145deg, #9b59b6, #8e44ad);
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        }
+
+        .login-button:hover, .create-account-button:hover, .upload-scripts-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            filter: brightness(1.1);
         }
 
         .modal {
@@ -100,26 +153,68 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
+            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.9));
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
             position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
         }
 
         .close-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             cursor: pointer;
+            font-size: 24px;
+            color: #95a5a6;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal-content input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        .modal-content button {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .modal-content h2 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -178,7 +273,6 @@
         const accountSuccessMessage = document.getElementById('accountSuccessMessage');
         const uploadScriptsButton = document.getElementById('uploadScriptsButton');
 
-        // Functions to save and load accounts
         function saveAccounts() {
             localStorage.setItem('accounts', JSON.stringify(accounts));
         }
@@ -190,20 +284,16 @@
             }
         }
 
-        // Initialize accounts on page load
         loadAccounts();
 
-        // Handle login button click
         loginButton.addEventListener('click', () => {
             loginModal.style.display = 'flex';
         });
 
-        // Handle create account button click
         createAccountButton.addEventListener('click', () => {
             createAccountModal.style.display = 'flex';
         });
 
-        // Handle closing modals
         document.getElementById('closeLoginModal').addEventListener('click', () => {
             loginModal.style.display = 'none';
         });
@@ -211,7 +301,6 @@
             createAccountModal.style.display = 'none';
         });
 
-        // Handle login submission
         submitLogin.addEventListener('click', () => {
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -229,7 +318,6 @@
             }
         });
 
-        // Handle account creation
         submitCreateAccount.addEventListener('click', () => {
             const newUsername = document.getElementById('newUsernameInput').value.trim();
             const newPassword = document.getElementById('newPasswordInput').value.trim();
@@ -247,13 +335,10 @@
             }
         });
 
-        // Upload Scripts button click handler
         uploadScriptsButton.addEventListener('click', () => {
-            // Add your upload scripts functionality here
             alert('Upload Scripts feature coming soon!');
         });
 
-        // Event listener for search input
         document.getElementById('searchInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const keyword = this.value.trim().toLowerCase();
