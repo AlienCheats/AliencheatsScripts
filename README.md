@@ -1,4 +1,7 @@
 
+
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -303,6 +306,12 @@
             <input type="text" id="scriptDescription" placeholder="Script description...">
         </div>
         
+        <div class="rounded-rectangle">
+            <label>
+                <input type="checkbox" id="scriptVisibility" checked> Public Script
+            </label>
+        </div>
+
         <button class="upload-button">Upload Script</button>
     </div>
 
@@ -452,6 +461,7 @@
             const keyword = document.getElementById('scriptKeyword').value;
             const name = document.getElementById('scriptName').value;
             const description = document.getElementById('scriptDescription').value;
+            const isPublic = document.getElementById('scriptVisibility').checked;
 
             if (!scriptText || !keyword || !name || !description) {
                 alert('Please fill in all fields');
@@ -463,7 +473,8 @@
                 keyword: keyword,
                 name: name,
                 description: description,
-                uploader: loggedInUser
+                uploader: loggedInUser,
+                isPublic: isPublic // Store visibility status
             });
 
             localStorage.setItem('scripts', JSON.stringify(scripts));
@@ -477,13 +488,14 @@
             document.getElementById('scriptKeyword').value = '';
             document.getElementById('scriptName').value = '';
             document.getElementById('scriptDescription').value = '';
+            document.getElementById('scriptVisibility').checked = true; // Reset checkbox
         });
 
         document.getElementById('searchInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const keyword = this.value.trim().toLowerCase();
                 const matchingScripts = scripts.filter(script => 
-                    script.keyword.toLowerCase() === keyword
+                    script.keyword.toLowerCase() === keyword && script.isPublic // Filter by public scripts
                 );
 
                 const resultsContainer = document.getElementById('resultsMessage');
@@ -501,61 +513,3 @@
 
                         const scriptCard = document.createElement('div');
                         scriptCard.className = 'script-card';
-                        scriptCard.innerHTML = `
-                            <h3>${script.name}</h3>
-                            <p class="uploader-info">Uploaded by: ${script.uploader || 'Unknown'}</p>
-                            <div class="script-details">
-                                <p>${script.description}</p>
-                                <button class="get-script-btn" data-script="${escapedText}">Get Script</button>
-                            </div>
-                        `;
-                        
-                        const getScriptBtn = scriptCard.querySelector('.get-script-btn');
-                        getScriptBtn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const scriptText = this.getAttribute('data-script');
-                            copyScript(scriptText, script.name);
-                        });
-
-                        scriptCard.addEventListener('click', function(e) {
-                            if (!e.target.classList.contains('get-script-btn')) {
-                                const details = this.querySelector('.script-details');
-                                details.style.display = details.style.display === 'none' ? 'block' : 'none';
-                            }
-                        });
-
-                        resultsContainer.appendChild(scriptCard);
-                    });
-                } else {
-                    resultsContainer.innerHTML = 'No scripts found for this keyword';
-                }
-                
-                this.value = '';
-            }
-        });
-
-        function copyScript(text, scriptName) {
-            const decodedText = text
-                .replace(/&amp;/g, '&')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&quot;/g, '"')
-                .replace(/&#039;/g, "'")
-                .replace(/&#096;/g, '`');
-
-            navigator.clipboard.writeText(decodedText).then(() => {
-                const notification = document.createElement('div');
-                notification.className = 'copy-notification';
-                notification.textContent = `"${scriptName}" copied to clipboard!`;
-                document.body.appendChild(notification);
-
-                setTimeout(() => {
-                    notification.remove();
-                }, 2000);
-            }).catch(() => {
-                alert('Failed to copy script to clipboard');
-            });
-        }
-    </script>
-</body>
-</html>
