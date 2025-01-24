@@ -3,62 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Background Image</title>
+    <title>Script Search</title>
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #2ecc71;
-            --accent-color: #e74c3c;
-            --text-color: #2c3e50;
+            --primary-color: #6366f1;
+            --secondary-color: #10b981;
+            --accent-color: #f43f5e;
+            --text-color: #1f2937;
             --modal-bg: rgba(255, 255, 255, 0.95);
+            --gradient-start: #2563eb;
+            --gradient-end: #7c3aed;
         }
 
         body {
-            background-image: url('https://raw.githubusercontent.com/AlienCheats/AliencheatsScripts/refs/heads/main/wood-grain-texture-close-up-0410-5698738.webp');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-attachment: fixed;
             height: 100vh;
             margin: 0;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            padding: 20px;
+            align-items: center;
+            padding: 40px 20px;
             position: relative;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             color: var(--text-color);
         }
 
         .username-display {
-            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
-            border-radius: 15px;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--gradient-start);
+            letter-spacing: 0.5px;
         }
 
         .rounded-rectangle {
-            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
-            border-radius: 25px;
-            width: 350px;
-            height: 55px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            width: 400px;
+            height: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 20px auto;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
         }
 
         .rounded-rectangle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
         }
 
         input {
@@ -67,89 +68,78 @@
             outline: none;
             width: 90%;
             font-size: 16px;
-            padding: 15px;
+            padding: 15px 25px;
             color: var(--text-color);
         }
 
         input::placeholder {
-            color: #95a5a6;
+            color: #6b7280;
         }
 
-        .message {
-            color: var(--accent-color);
-            text-align: center;
+        .button-container {
+            display: flex;
+            gap: 15px;
             margin-top: 20px;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .results {
-            color: var(--secondary-color);
-            text-align: center;
-            margin-top: 15px;
-            font-weight: 500;
-            animation: fadeIn 0.3s ease;
-        }
-
-        img {
-            margin-top: 20px;
-            max-width: 300px;
-            border-radius: 15px;
-            display: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        img:hover {
-            transform: scale(1.02);
-        }
-
-        .label {
-            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.8));
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 15px;
-            padding: 12px 20px;
-            display: none;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.3s ease;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .login-button, .create-account-button, .upload-scripts-button, .logout-button {
-            background: linear-gradient(145deg, var(--primary-color), #357abd);
+            background: rgba(255, 255, 255, 0.95);
             border: none;
             border-radius: 25px;
-            padding: 12px 25px;
-            font-size: 14px;
+            padding: 12px 30px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-            margin: 8px;
-            display: inline-block;
-            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            color: var(--gradient-start);
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
-        .create-account-button {
-            background: linear-gradient(145deg, var(--secondary-color), #27ae60);
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        .login-button:hover, .create-account-button:hover, 
+        .upload-scripts-button:hover, .logout-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+            background: white;
         }
 
-        .upload-scripts-button {
-            background: linear-gradient(145deg, #9b59b6, #8e44ad);
-            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        .results-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
         }
 
-        .logout-button {
-            background: linear-gradient(145deg, #e74c3c, #c0392b);
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        .message, .results {
+            margin: 15px 0;
+            font-weight: 500;
+            color: var(--text-color);
         }
 
-        .login-button:hover, .create-account-button:hover, .upload-scripts-button:hover, .logout-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            filter: brightness(1.1);
+        #resultImage {
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .label {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 10px 20px;
+            margin-top: 15px;
+            display: inline-block;
+            font-weight: 600;
+            color: var(--gradient-start);
         }
 
         .modal {
@@ -158,7 +148,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
             align-items: center;
@@ -167,23 +157,22 @@
         }
 
         .modal-content {
-            background: linear-gradient(145deg, var(--modal-bg), rgba(255, 255, 255, 0.9));
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             width: 90%;
+            max-width: 400px;
+            position: relative;
         }
 
         .close-button {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
+            top: 20px;
+            right: 20px;
             font-size: 24px;
-            color: #95a5a6;
+            cursor: pointer;
+            color: #6b7280;
             transition: color 0.3s ease;
         }
 
@@ -191,52 +180,67 @@
             color: var(--accent-color);
         }
 
+        .modal-content input {
+            width: calc(100% - 40px);
+            margin: 10px 0;
+            padding: 12px 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content input:focus {
+            border-color: var(--gradient-start);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .modal-content button {
+            width: 100%;
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 25px;
+            color: var(--text-color);
+            font-size: 24px;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .modal-content input {
-            width: 100%;
-            margin: 10px 0;
-            padding: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-        }
-
-        .modal-content input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-        }
-
-        .modal-content button {
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        .modal-content h2 {
-            color: var(--text-color);
-            margin-bottom: 20px;
-            font-weight: 600;
+        .fade-in {
+            animation: fadeIn 0.3s ease forwards;
         }
     </style>
 </head>
 <body>
     <div id="userDisplay" class="username-display" style="display: none;"></div>
-    <button class="upload-scripts-button" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
-    <button class="logout-button" id="logoutButton" style="display: none;">Log Out</button>
+    
+    <div class="button-container">
+        <button class="upload-scripts-button" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
+        <button class="logout-button" id="logoutButton" style="display: none;">Log Out</button>
+    </div>
+
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
-    <div class="message" id="resultMessage"></div>
-    <div class="results" id="resultsMessage"></div>
-    <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image">
-    <div class="label" id="resultLabel">Yarhm</div>
 
-    <button class="login-button" id="loginButton">Login</button>
-    <button class="create-account-button" id="createAccountButton">Create Account</button>
+    <div class="results-container">
+        <div class="message" id="resultMessage"></div>
+        <div class="results" id="resultsMessage"></div>
+        <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image" style="display: none;">
+        <div class="label" id="resultLabel" style="display: none;">Yarhm</div>
+    </div>
+
+    <div class="button-container">
+        <button class="login-button" id="loginButton">Login</button>
+        <button class="create-account-button" id="createAccountButton">Create Account</button>
+    </div>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -245,7 +249,7 @@
             <h2>Login</h2>
             <input type="text" id="usernameInput" placeholder="Username">
             <input type="password" id="passwordInput" placeholder="Password">
-            <button id="submitLogin">Login</button>
+            <button id="submitLogin" class="login-button">Login</button>
             <div class="message" id="loginErrorMessage"></div>
         </div>
     </div>
@@ -257,7 +261,7 @@
             <h2>Create Account</h2>
             <input type="text" id="newUsernameInput" placeholder="New Username">
             <input type="password" id="newPasswordInput" placeholder="New Password">
-            <button id="submitCreateAccount">Create Account</button>
+            <button id="submitCreateAccount" class="create-account-button">Create Account</button>
             <div class="message" id="accountErrorMessage"></div>
             <div class="message" id="accountSuccessMessage"></div>
         </div>
@@ -326,7 +330,6 @@
             logoutButton.style.display = 'none';
         }
 
-        // Initialize on page load
         loadAccounts();
         checkLoginState();
 
