@@ -130,33 +130,58 @@
             display: none;
         }
 
-        .file-input-container {
-            margin: 20px 0;
+        .script-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+            resize: vertical;
+            font-family: monospace;
         }
 
-        .file-input {
-            display: none;
-        }
-
-        .file-label {
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
+        .script-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
             cursor: pointer;
-            display: inline-block;
+        }
+
+        .script-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .file-label:hover {
+        .script-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .selected-file {
+        .script-details {
+            display: none;
             margin-top: 15px;
-            color: var(--text-color);
-            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .get-script-btn {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
         .upload-button {
@@ -175,31 +200,6 @@
         .upload-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .message, .results {
-            margin: 15px 0;
-            font-weight: 500;
-            color: var(--text-color);
-        }
-
-        #resultImage {
-            border-radius: 15px;
-            width: 100%;
-            max-width: 400px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .label {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            padding: 10px 20px;
-            margin-top: 15px;
-            display: inline-block;
-            font-weight: 600;
-            color: var(--gradient-start);
         }
 
         .modal {
@@ -240,41 +240,10 @@
             color: var(--accent-color);
         }
 
-        .modal-content input {
-            width: calc(100% - 40px);
-            margin: 10px 0;
-            padding: 12px 20px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-
-        .modal-content input:focus {
-            border-color: var(--gradient-start);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .modal-content button {
-            width: 100%;
-            margin-top: 20px;
-            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-            color: white;
-        }
-
-        .modal-content h2 {
-            margin-bottom: 25px;
+        .message {
+            margin: 15px 0;
+            font-weight: 500;
             color: var(--text-color);
-            font-size: 24px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease forwards;
         }
     </style>
 </head>
@@ -293,10 +262,18 @@
     <div class="upload-container" id="uploadContainer">
         <h2>Upload Your Script</h2>
         
-        <div class="file-input-container">
-            <input type="file" id="scriptFile" class="file-input" accept=".lua,.txt">
-            <label for="scriptFile" class="file-label">Choose File</label>
-            <div class="selected-file" id="selectedFileName">No file chosen</div>
+        <div class="script-input-container">
+            <textarea id="scriptText" placeholder="Paste your script here..." class="script-textarea"></textarea>
+        </div>
+
+        <div class="keyword-selector">
+            <select id="scriptKeyword" class="script-select">
+                <option value="">Select a keyword...</option>
+                <option value="mm2">MM2</option>
+                <option value="arsenal">Arsenal</option>
+                <option value="blox">Blox Fruits</option>
+                <option value="pet">Pet Simulator</option>
+            </select>
         </div>
 
         <div class="rounded-rectangle">
@@ -313,8 +290,6 @@
     <div class="results-container">
         <div class="message" id="resultMessage"></div>
         <div class="results" id="resultsMessage"></div>
-        <img id="resultImage" src="https://raw.githubusercontent.com/AlienCheats/-AlienCheats-Scripts/refs/heads/main/t%C3%A9l%C3%A9chargement%20(1).jpg" alt="MM2 Result Image" style="display: none;">
-        <div class="label" id="resultLabel" style="display: none;">Yarhm</div>
     </div>
 
     <div class="button-container">
@@ -350,6 +325,7 @@
     <script>
         const accounts = {};
         let loggedInUser = null;
+        const scripts = JSON.parse(localStorage.getItem('scripts') || '[]');
 
         const userDisplay = document.getElementById('userDisplay');
         const loginModal = document.getElementById('loginModal');
@@ -357,11 +333,6 @@
         const loginButton = document.getElementById('loginButton');
         const logoutButton = document.getElementById('logoutButton');
         const createAccountButton = document.getElementById('createAccountButton');
-        const submitLogin = document.getElementById('submitLogin');
-        const submitCreateAccount = document.getElementById('submitCreateAccount');
-        const loginErrorMessage = document.getElementById('loginErrorMessage');
-        const accountErrorMessage = document.getElementById('accountErrorMessage');
-        const accountSuccessMessage = document.getElementById('accountSuccessMessage');
         const uploadScriptsButton = document.getElementById('uploadScriptsButton');
         const searchContainer = document.getElementById('searchContainer');
         const uploadContainer = document.getElementById('uploadContainer');
@@ -437,7 +408,7 @@
             createAccountModal.style.display = 'none';
         });
 
-        submitLogin.addEventListener('click', () => {
+        document.getElementById('submitLogin').addEventListener('click', () => {
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
 
@@ -454,7 +425,7 @@
             }
         });
 
-        submitCreateAccount.addEventListener('click', () => {
+        document.getElementById('submitCreateAccount').addEventListener('click', () => {
             const newUsername = document.getElementById('newUsernameInput').value.trim();
             const newPassword = document.getElementById('newPasswordInput').value.trim();
 
@@ -477,46 +448,79 @@
             resultsContainer.style.display = 'none';
         });
 
-        const fileInput = document.getElementById('scriptFile');
-        const fileNameDisplay = document.getElementById('selectedFileName');
-        
-        fileInput.addEventListener('change', function(e) {
-            if (this.files.length > 0) {
-                fileNameDisplay.textContent = this.files[0].name;
-            } else {
-                fileNameDisplay.textContent = 'No file chosen';
-            }
-        });
-
         document.querySelector('.upload-button').addEventListener('click', function() {
-            alert('Upload successful!');
+            const scriptText = document.getElementById('scriptText').value;
+            const keyword = document.getElementById('scriptKeyword').value;
+            const name = document.getElementById('scriptName').value;
+            const description = document.getElementById('scriptDescription').value;
+
+            if (!scriptText || !keyword || !name || !description) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            scripts.push({
+                text: scriptText,
+                keyword: keyword,
+                name: name,
+                description: description
+            });
+
+            localStorage.setItem('scripts', JSON.stringify(scripts));
+            
+            alert('Script uploaded successfully!');
             uploadContainer.style.display = 'none';
             searchContainer.style.display = 'flex';
             resultsContainer.style.display = 'block';
+            
+            // Clear inputs
+            document.getElementById('scriptText').value = '';
+            document.getElementById('scriptKeyword').value = '';
+            document.getElementById('scriptName').value = '';
+            document.getElementById('scriptDescription').value = '';
         });
 
         document.getElementById('searchInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 const keyword = this.value.trim().toLowerCase();
-                if (keyword === 'mm2') {
-                    document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
-                    document.getElementById('resultImage').style.display = 'block';
-                    document.getElementById('resultLabel').style.display = 'block';
-                } else if (keyword === 'fisch') {
-                    document.getElementById('resultMessage').textContent = '';
-                    document.getElementById('resultsMessage').textContent = `Results for "${keyword}"`;
-                    document.getElementById('resultImage').style.display = 'none';
-                    document.getElementById('resultLabel').style.display = 'none';
+                const matchingScripts = scripts.filter(script => 
+                    script.keyword.toLowerCase() === keyword
+                );
+
+                const resultsContainer = document.getElementById('resultsMessage');
+                resultsContainer.innerHTML = '';
+
+                if (matchingScripts.length > 0) {
+                    matchingScripts.forEach(script => {
+                        const scriptCard = document.createElement('div');
+                        scriptCard.className = 'script-card';
+                        scriptCard.innerHTML = `
+                            <h3>${script.name}</h3>
+                            <div class="script-details">
+                                <p>${script.description}</p>
+                                <button class="get-script-btn" onclick="copyScript('${script.text}')">Get Script</button>
+                            </div>
+                        `;
+                        
+                        scriptCard.addEventListener('click', function() {
+                            const details = this.querySelector('.script-details');
+                            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                        });
+
+                        resultsContainer.appendChild(scriptCard);
+                    });
                 } else {
-                    document.getElementById('resultMessage').textContent = 'Nothing found here';
-                    document.getElementById('resultsMessage').textContent = '';
-                    document.getElementById('resultImage').style.display = 'none';
-                    document.getElementById('resultLabel').style.display = 'none';
+                    resultsContainer.innerHTML = 'No scripts found for this keyword';
                 }
+                
                 this.value = '';
             }
         });
+
+        function copyScript(text) {
+            navigator.clipboard.writeText(text);
+            alert('Script copied to clipboard!');
+        }
     </script>
 </body>
 </html>
