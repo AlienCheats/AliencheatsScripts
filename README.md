@@ -346,6 +346,16 @@
         let loggedInUser = null;
         const scripts = JSON.parse(localStorage.getItem('scripts') || '[]');
 
+        // Load existing accounts from localStorage
+        function loadAccounts() {
+            const savedAccounts = localStorage.getItem('accounts');
+            if (savedAccounts) {
+                Object.assign(accounts, JSON.parse(savedAccounts));
+            }
+        }
+        loadAccounts();
+
+        // DOM Elements
         const userDisplay = document.getElementById('userDisplay');
         const loginModal = document.getElementById('loginModal');
         const createAccountModal = document.getElementById('createAccountModal');
@@ -357,25 +367,7 @@
         const uploadContainer = document.getElementById('uploadContainer');
         const resultsContainer = document.querySelector('.results-container');
 
-        function saveAccounts() {
-            localStorage.setItem('accounts', JSON.stringify(accounts));
-        }
-
-        function loadAccounts() {
-            const savedAccounts = localStorage.getItem('accounts');
-            if (savedAccounts) {
-                Object.assign(accounts, JSON.parse(savedAccounts));
-            }
-        }
-
-        function saveLoginState(username) {
-            localStorage.setItem('loggedInUser', username);
-        }
-
-        function clearLoginState() {
-            localStorage.removeItem('loggedInUser');
-        }
-
+        // Check login state on page load
         function checkLoginState() {
             const savedUser = localStorage.getItem('loggedInUser');
             if (savedUser && accounts[savedUser]) {
@@ -383,7 +375,9 @@
                 updateUIForLoggedInUser();
             }
         }
+        checkLoginState();
 
+        // UI Update Functions
         function updateUIForLoggedInUser() {
             userDisplay.textContent = `Welcome, ${loggedInUser}!`;
             userDisplay.style.display = 'block';
@@ -395,7 +389,7 @@
 
         function logout() {
             loggedInUser = null;
-            clearLoginState();
+            localStorage.removeItem('loggedInUser');
             userDisplay.style.display = 'none';
             loginButton.style.display = 'inline-block';
             createAccountButton.style.display = 'inline-block';
@@ -406,26 +400,12 @@
             resultsContainer.style.display = 'block';
         }
 
-        loadAccounts();
-        checkLoginState();
-
-        loginButton.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-        });
-
-        createAccountButton.addEventListener('click', () => {
-            createAccountModal.style.display = 'flex';
-        });
-
+        // Event Listeners
+        loginButton.addEventListener('click', () => loginModal.style.display = 'flex');
+        createAccountButton.addEventListener('click', () => createAccountModal.style.display = 'flex');
         logoutButton.addEventListener('click', logout);
-
-        document.getElementById('closeLoginModal').addEventListener('click', () => {
-            loginModal.style.display = 'none';
-        });
-
-        document.getElementById('closeCreateAccountModal').addEventListener('click', () => {
-            createAccountModal.style.display = 'none';
-        });
+        document.getElementById('closeLoginModal').addEventListener('click', () => loginModal.style.display = 'none');
+        document.getElementById('closeCreateAccountModal').addEventListener('click', () => createAccountModal.style.display = 'none');
 
         document.getElementById('submitLogin').addEventListener('click', () => {
             const username = document.getElementById('usernameInput').value.trim();
@@ -433,14 +413,14 @@
 
             if (accounts[username] && accounts[username] === password) {
                 loggedInUser = username;
-                saveLoginState(username);
+                localStorage.setItem('loggedInUser', username);
                 updateUIForLoggedInUser();
                 loginModal.style.display = 'none';
                 document.getElementById('usernameInput').value = '';
                 document.getElementById('passwordInput').value = '';
-                loginErrorMessage.textContent = '';
+                document.getElementById('loginErrorMessage').textContent = '';
             } else {
-                loginErrorMessage.textContent = 'Username or password is incorrect.';
+                document.getElementById('loginErrorMessage').textContent = 'Username or password is incorrect.';
             }
         });
 
@@ -449,13 +429,13 @@
             const newPassword = document.getElementById('newPasswordInput').value.trim();
 
             if (accounts[newUsername]) {
-                accountErrorMessage.textContent = 'Username already taken.';
-                accountSuccessMessage.textContent = '';
+                document.getElementById('accountErrorMessage').textContent = 'Username already taken.';
+                document.getElementById('accountSuccessMessage').textContent = '';
             } else {
                 accounts[newUsername] = newPassword;
-                saveAccounts();
-                accountSuccessMessage.textContent = 'Account created successfully!';
-                accountErrorMessage.textContent = '';
+                localStorage.setItem('accounts', JSON.stringify(accounts));
+                document.getElementById('accountSuccessMessage').textContent = 'Account created successfully!';
+                document.getElementById('accountErrorMessage').textContent = '';
                 document.getElementById('newUsernameInput').value = '';
                 document.getElementById('newPasswordInput').value = '';
             }
@@ -511,17 +491,32 @@
 
                 if (matchingScripts.length > 0) {
                     matchingScripts.forEach(script => {
+                        const escapedText = script.text
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/"/g, '&quot;')
+                            .replace(/'/g, '&#039;')
+                            .replace(/`/g, '&#096;');
+
                         const scriptCard = document.createElement('div');
                         scriptCard.className = 'script-card';
                         scriptCard.innerHTML = `
                             <h3>${script.name}</h3>
-                            <p class="uploader-info">Uploaded by: ${script.uploader}</p>
+                            <p class="uploader-info">Uploaded by: ${script.uploader || 'Unknown'}</p>
                             <div class="script-details">
                                 <p>${script.description}</p>
-                                <button class="get-script-btn" onclick="copyScript('${script.text}', '${script.name}')">Get Script</button>
+                                <button class="get-script-btn" data-script="${escapedText}">Get Script</button>
                             </div>
                         `;
                         
+                        const getScriptBtn = scriptCard.querySelector('.get-script-btn');
+                        getScriptBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const scriptText = this.getAttribute('data-script');
+                            copyScript(scriptText, script.name);
+                        });
+
                         scriptCard.addEventListener('click', function(e) {
                             if (!e.target.classList.contains('get-script-btn')) {
                                 const details = this.querySelector('.script-details');
@@ -540,7 +535,15 @@
         });
 
         function copyScript(text, scriptName) {
-            navigator.clipboard.writeText(text).then(() => {
+            const decodedText = text
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#039;/g, "'")
+                .replace(/&#096;/g, '`');
+
+            navigator.clipboard.writeText(decodedText).then(() => {
                 const notification = document.createElement('div');
                 notification.className = 'copy-notification';
                 notification.textContent = `"${scriptName}" copied to clipboard!`;
