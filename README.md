@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -75,7 +75,7 @@
             display: none;
         }
 
-        .login-button, .create-account-button {
+        .login-button, .create-account-button, .upload-scripts-button {
             background-color: rgba(255, 255, 255, 0.8);
             border: none;
             border-radius: 15px;
@@ -86,6 +86,12 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             margin: 5px;
             display: inline-block;
+        }
+
+        .upload-scripts-button:hover {
+            background-color: rgba(240, 240, 240, 0.9);
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
         }
 
         .modal {
@@ -119,6 +125,7 @@
 </head>
 <body>
     <div id="userDisplay" class="username-display" style="display: none;"></div>
+    <button class="upload-scripts-button" id="uploadScriptsButton" style="display: none;">Upload Scripts</button>
     <div class="rounded-rectangle">
         <input type="text" id="searchInput" placeholder="Search scripts with keywords...">
     </div>
@@ -169,6 +176,7 @@
         const loginErrorMessage = document.getElementById('loginErrorMessage');
         const accountErrorMessage = document.getElementById('accountErrorMessage');
         const accountSuccessMessage = document.getElementById('accountSuccessMessage');
+        const uploadScriptsButton = document.getElementById('uploadScriptsButton');
 
         // Functions to save and load accounts
         function saveAccounts() {
@@ -215,6 +223,7 @@
                 loginModal.style.display = 'none';
                 createAccountButton.style.display = 'none';
                 loginButton.style.display = 'none';
+                uploadScriptsButton.style.display = 'inline-block';
             } else {
                 loginErrorMessage.textContent = 'Username or password is incorrect.';
             }
@@ -236,6 +245,12 @@
                 document.getElementById('newUsernameInput').value = '';
                 document.getElementById('newPasswordInput').value = '';
             }
+        });
+
+        // Upload Scripts button click handler
+        uploadScriptsButton.addEventListener('click', () => {
+            // Add your upload scripts functionality here
+            alert('Upload Scripts feature coming soon!');
         });
 
         // Event listener for search input
